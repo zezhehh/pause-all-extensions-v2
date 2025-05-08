@@ -232,8 +232,9 @@
         </div>
         <div class="secondary-controls">
           {#if advancedMode}
-            <button on:click={toggleGrouping} disabled={isProcessing || allPaused}>
-              {isGrouping ? 'Cancel' : 'Create Group'}
+            <button class="create-group-btn" on:click={toggleGrouping} disabled={isProcessing || allPaused}>
+              <span class="plus-icon" aria-hidden="true">&#43;</span>
+              <span>{isGrouping ? 'Cancel' : 'Create Group'}</span>
             </button>
           {/if}
           <label class="mode-switch">
@@ -278,17 +279,22 @@
                     </button>
                   </div>
                 {:else}
-                  <div class="group-name-container" on:click={() => startEditingGroup(group)}>
+                  <button type="button" class="group-name-container" on:click={() => startEditingGroup(group)}>
                     <h3 class="editable">{group.name}</h3>
                     <span class="edit-icon">✎</span>
-                  </div>
+                  </button>
                 {/if}
                 <div class="group-controls">
+                  <button class="icon-button delete" on:click={() => deleteGroup(group.id)} disabled={isProcessing} title="Delete Group" aria-label="Delete Group">
+                    <svg class="trash-icon" width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7.5 8.5V14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      <path d="M12.5 8.5V14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      <rect x="4.5" y="5.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M8.5 5.5V4.5C8.5 3.94772 8.94772 3.5 9.5 3.5H10.5C11.0523 3.5 11.5 3.94772 11.5 4.5V5.5" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                  </button>
                   <button on:click={() => toggleGroup(group)} disabled={isProcessing || allPaused}>
                     {group.paused ? 'Resume' : 'Pause'}
-                  </button>
-                  <button class="danger" on:click={() => deleteGroup(group.id)} disabled={isProcessing}>
-                    Delete
                   </button>
                 </div>
               </div>
@@ -357,11 +363,6 @@
     margin-bottom: 16px;
   }
 
-  h1 {
-    font-size: 20px;
-    margin: 0 0 16px 0;
-  }
-
   .controls {
     display: flex;
     flex-direction: column;
@@ -400,16 +401,24 @@
     font-size: 14px;
   }
 
-  button.primary {
-    background: #4CAF50;
+  button.primary,
+  .advanced-controls button.primary {
+    background: #2196F3;
     color: white;
-    border-color: #4CAF50;
+    border: 1px solid #2196F3;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.2s, border 0.2s;
   }
-
-  button.danger {
-    background: #f44336;
-    color: white;
-    border-color: #f44336;
+  button.primary:hover:not(:disabled),
+  .advanced-controls button.primary:hover:not(:disabled) {
+    background: #1976D2;
+    border-color: #1976D2;
+  }
+  button.primary:disabled,
+  .advanced-controls button.primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   button:disabled {
@@ -419,10 +428,6 @@
 
   button:hover:not(:disabled) {
     opacity: 0.9;
-  }
-
-  button.full-width {
-    width: 100%;
   }
 
   .advanced-controls {
@@ -467,6 +472,10 @@
     flex-shrink: 0;
   }
 
+  .group-controls button:last-child {
+    width: 80px;
+  }
+
   .ungrouped h3 {
     font-size: 16px;
     margin: 0 0 8px 0;
@@ -475,17 +484,6 @@
   .simple-list {
     display: flex;
     flex-direction: column;
-  }
-
-  button.storage-mode {
-    background: #2196F3;
-    color: white;
-    border-color: #2196F3;
-  }
-
-  button.storage-mode:hover {
-    background: #1976D2;
-    border-color: #1976D2;
   }
 
   .group-name-edit {
@@ -548,20 +546,22 @@
     min-width: 0;
     cursor: pointer;
     padding: 0;
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    outline: none;
+    box-shadow: none;
+    text-align: left;
   }
 
   .group-name-container:hover {
     background-color: #f0f0f0;
   }
 
-  .group-name-container h3 {
-    margin: 0;
-    font-size: 16px;
-    flex: 1;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .group-name-container:focus-visible {
+    outline: 2px solid #2196F3;
+    outline-offset: 2px;
   }
 
   .edit-icon {
@@ -573,52 +573,6 @@
 
   .group-name-container:hover .edit-icon {
     opacity: 1;
-  }
-
-  .list-selector {
-    background: #f5f5f5;
-    border-radius: 4px;
-    margin: 16px 0;
-    padding: 16px;
-  }
-
-  .list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-
-  .list-header h3 {
-    margin: 0;
-    font-size: 16px;
-  }
-
-  .list-content {
-    max-height: 200px;
-    overflow-y: auto;
-  }
-
-  .list-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 0;
-  }
-
-  .list-item label {
-    cursor: pointer;
-    user-select: none;
-  }
-
-  button.secondary {
-    background: #f0f0f0;
-    color: #333;
-    border-color: #ccc;
-  }
-
-  button.secondary:hover:not(:disabled) {
-    background: #e0e0e0;
   }
 
   .mode-switch {
@@ -656,11 +610,21 @@
   }
 
   .mode-switch input:checked + .slider {
-    background-color: #4CAF50;
+    background-color: #2196F3;
+    box-shadow: 0 0 0 2px #1976D233;
   }
 
   .mode-switch input:checked + .slider:before {
     transform: translateX(20px);
+    background: white;
+  }
+
+  .mode-switch input:focus + .slider {
+    box-shadow: 0 0 0 2px #1976D2;
+  }
+
+  .mode-switch input:checked + .slider:hover {
+    background-color: #1976D2;
   }
 
   .mode-switch input:disabled + .slider {
@@ -676,5 +640,72 @@
   .mode-switch input:disabled ~ .mode-label {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  button,
+  .icon-button {
+    border-radius: 6px;
+  }
+
+  .create-group-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    background: #2196F3;
+    color: white;
+    border: 1px solid #2196F3;
+    border-radius: 6px;
+    padding: 7px 18px;
+    transition: background 0.2s, border 0.2s;
+    cursor: pointer;
+  }
+  .create-group-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .create-group-btn:hover:not(:disabled) {
+    background: #1976D2;
+    border-color: #1976D2;
+  }
+  .plus-icon {
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    margin-right: 2px;
+    line-height: 1;
+  }
+
+  .icon-button.delete {
+    background: none;
+    border: none;
+    color: #e53935;
+    font-size: 18px;
+    padding: 0;
+    border-radius: 50%;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+  }
+  .icon-button.delete:hover:not(:disabled) {
+    background: #ffeaea;
+    color: #b71c1c;
+    box-shadow: 0 2px 8px rgba(229,57,53,0.08);
+  }
+  .icon-button.delete:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .trash-icon {
+    display: block;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
   }
 </style> 

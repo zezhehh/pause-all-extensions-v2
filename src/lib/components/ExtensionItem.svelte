@@ -65,12 +65,15 @@
   
   <div class="extension-info">
     <span class="name">{name}</span>
-    {#if blacklist.includes(extId)}
-      <span class="list-hint blacklist">(blacklisted)</span>
-    {/if}
-    {#if whitelist.includes(extId)}
-      <span class="list-hint whitelist">(whitelisted)</span>
-    {/if}
+    <span class="list-hint {whitelist.includes(extId) ? 'whitelisted' : ''} {blacklist.includes(extId) ? 'blacklisted' : ''}">
+      {#if whitelist.includes(extId)}
+        (whitelisted)
+      {:else if blacklist.includes(extId)}
+        (blacklisted)
+      {:else}
+        &nbsp;
+      {/if}
+    </span>
   </div>
   
   <button
@@ -99,7 +102,8 @@
   }
 
   .extension-info {
-    flex: 1;
+    flex: 1 1 0%;
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -108,18 +112,27 @@
   .name {
     font-size: 14px;
     color: #333;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .list-hint {
-    font-size: 12px;
+    font-size: 13px;
+    width: 110px;
+    text-align: right;
+    margin-left: 8px;
+    flex-shrink: 0;
   }
 
-  .list-hint.blacklist {
-    color: #666;
+  .list-hint.whitelisted {
+    color: #43a047;
   }
 
-  .list-hint.whitelist {
-    color: #4CAF50;
+  .list-hint.blacklisted {
+    color: #222;
   }
 
   .toggle-button {
@@ -130,6 +143,7 @@
     cursor: pointer;
     font-size: 12px;
     transition: all 0.2s;
+    width: 80px;
   }
 
   .toggle-button:disabled {
@@ -138,12 +152,14 @@
   }
 
   .toggle-button.enabled {
-    background: #4CAF50;
+    background: #2196F3;
     color: white;
-    border-color: #4CAF50;
+    border-color: #2196F3;
   }
 
-  .toggle-button:hover:not(:disabled) {
-    opacity: 0.9;
+  .toggle-button.enabled:hover:not(:disabled) {
+    background: #1976D2;
+    border-color: #1976D2;
+    color: white;
   }
 </style> 
