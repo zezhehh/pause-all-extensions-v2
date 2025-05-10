@@ -12,6 +12,7 @@
   export let disabled: boolean = false;
   export let blacklist: string[] = [];
   export let whitelist: string[] = [];
+  export let iconURL: string = '';
 
   const pauseController = new PauseController();
 
@@ -63,6 +64,9 @@
     />
   {/if}
   
+  {#if iconURL}
+    <img class="extension-icon" src={iconURL} alt="" width="24" height="24" />
+  {/if}
   <div class="extension-info">
     <span class="name">{name}</span>
     <span class="list-hint {whitelist.includes(extId) ? 'whitelisted' : ''} {blacklist.includes(extId) ? 'blacklisted' : ''}">
@@ -161,5 +165,16 @@
     background: #1976D2;
     border-color: #1976D2;
     color: white;
+  }
+
+  .extension-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: #e3eaf2;
+    box-shadow: 0 1px 3px rgba(33,150,243,0.07);
+    margin-right: 4px;
+    flex-shrink: 0;
+    object-fit: cover;
   }
 </style> 

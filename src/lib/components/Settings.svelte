@@ -3,7 +3,7 @@
   import { type StorageMode, getStorageMode, setStorageMode, updateStorageState } from "../../lib/storage";
   import { onMount } from "svelte";
 
-  export let extensions: Array<{ id: string; name: string; enabled: boolean }> = [];
+  export let extensions: Array<{ id: string; name: string; enabled: boolean; iconURL?: string }> = [];
   export let whitelist: string[] = [];
   export let blacklist: string[] = [];
   export let isProcessing = false;
@@ -148,6 +148,9 @@
               disabled={isProcessing ||
                 (currentList === "whitelist" ? blacklist.includes(ext.id) : whitelist.includes(ext.id))}
             />
+            {#if ext.iconURL}
+              <img class="extension-icon" src={ext.iconURL} alt="" width="20" height="20" />
+            {/if}
             <div class="extension-info">
               <label
                 for={`list-${ext.id}`}
@@ -398,5 +401,16 @@
   }
   .list-hint.blacklisted {
     color: #222;
+  }
+
+  .extension-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: #e3eaf2;
+    box-shadow: 0 1px 3px rgba(33,150,243,0.07);
+    margin-right: 6px;
+    flex-shrink: 0;
+    object-fit: cover;
   }
 </style>

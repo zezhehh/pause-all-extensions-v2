@@ -12,7 +12,7 @@
   import ExtensionItem from '../../lib/components/ExtensionItem.svelte';
   import Settings from '../../lib/components/Settings.svelte';
 
-  let extensions: Array<{ id: string; name: string; enabled: boolean }> = [];
+  let extensions: Array<{ id: string; name: string; enabled: boolean; iconURL: string }> = [];
   let groups: ExtensionGroup[] = [];
   let advancedMode = false;
   let allPaused = false;
@@ -43,7 +43,8 @@
       .map(ext => ({
         id: ext.id,
         name: ext.name,
-        enabled: ext.enabled
+        enabled: ext.enabled,
+        iconURL: (ext.icons && ext.icons.length > 0) ? ext.icons[ext.icons.length - 1].url : ''
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
   });
@@ -311,6 +312,7 @@
                     disabled={isProcessing || allPaused}
                     {blacklist}
                     {whitelist}
+                    iconURL={ext.iconURL}
                   />
                 {/if}
               {/each}
@@ -332,6 +334,7 @@
             disabled={isProcessing || allPaused}
             {blacklist}
             {whitelist}
+            iconURL={ext.iconURL}
           />
         {/each}
       </div>
@@ -345,6 +348,7 @@
             disabled={isProcessing || allPaused}
             {blacklist}
             {whitelist}
+            iconURL={ext.iconURL}
           />
         {/each}
       </div>
