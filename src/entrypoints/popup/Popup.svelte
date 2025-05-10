@@ -294,7 +294,7 @@
                       <path d="M8.5 5.5V4.5C8.5 3.94772 8.94772 3.5 9.5 3.5H10.5C11.0523 3.5 11.5 3.94772 11.5 4.5V5.5" stroke="currentColor" stroke-width="1.5"/>
                     </svg>
                   </button>
-                  <button on:click={() => toggleGroup(group)} disabled={isProcessing || allPaused}>
+                  <button on:click={() => toggleGroup(group)} disabled={isProcessing}>
                     {group.paused ? 'Resume' : 'Pause'}
                   </button>
                 </div>
@@ -309,7 +309,7 @@
                     showCheckbox={isGrouping}
                     selected={selectedExtensions.includes(ext.id)}
                     onSelect={isGrouping ? handleExtensionSelect : null}
-                    disabled={isProcessing || allPaused}
+                    disabled={isProcessing}
                     {blacklist}
                     {whitelist}
                     iconURL={ext.iconURL}
@@ -331,7 +331,7 @@
             showCheckbox={isGrouping}
             selected={selectedExtensions.includes(ext.id)}
             onSelect={isGrouping ? handleExtensionSelect : null}
-            disabled={isProcessing || allPaused}
+            disabled={isProcessing}
             {blacklist}
             {whitelist}
             iconURL={ext.iconURL}
@@ -345,7 +345,7 @@
             extId={ext.id}
             name={ext.name}
             enabled={ext.enabled}
-            disabled={isProcessing || allPaused}
+            disabled={isProcessing}
             {blacklist}
             {whitelist}
             iconURL={ext.iconURL}
