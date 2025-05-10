@@ -12,6 +12,7 @@ Take control of your browser with a single click! Pause All Extensions is the ul
 
 Whether you’re troubleshooting, focusing, or just want a faster browser, Pause All Extensions gives you the power and flexibility you need.
 
-<img width="640" alt="simple" src="https://github.com/user-attachments/assets/d898ec19-5696-45c0-ae19-f7ad25a8d0fb" />
-<img width="640" alt="advanced" src="https://github.com/user-attachments/assets/91975ba3-3529-48c2-a8ed-d16baa68e70d" />
-<img width="640" alt="settings" src="https://github.com/user-attachments/assets/9b5699ec-1b39-4312-a040-78dfd79e8e08" />
+<img width="640" alt="simple" src="https://github.com/user-attachments/assets/c0dacd2a-3f71-4b82-a963-864d76fbf229" />
+<img width="640" alt="advanced" src="https://github.com/user-attachments/assets/59974d57-01e3-4628-ac3e-a87c7cf92105" />
+<img width="640" alt="settings" src="https://github.com/user-attachments/assets/38c829d5-0010-469c-9aba-a28b9efe7e88" />
+
