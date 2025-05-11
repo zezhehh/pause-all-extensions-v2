@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from 'wxt/browser';
   import { PauseController } from '../PauseController';
-  import { updateStorageState, getStorageState } from '../storage';
+  import { onMount, onDestroy } from 'svelte';
 
   export let extId: string;
   export let enabled: boolean;
@@ -34,13 +34,8 @@
 
     try {
       await browser.management.setEnabled(extId, !enabled);
-      const state = await getStorageState();
-      await updateStorageState({
-        extensions: {
-          ...state.extensions,
-          [extId]: !enabled
-        }
-      });
+      // Update the stored state using the new method
+      await pauseController.updateExtensionState(extId, !enabled);
       // Update local state
       enabled = !enabled;
     } catch (error) {
@@ -48,10 +43,45 @@
     }
   }
 
-  // Watch for enabled prop changes
+  // Watch for enabled prop changes and sync with actual state
   $: if (enabled !== undefined) {
-    enabled = enabled;
+    // Get the actual state from the browser
+    pauseController.getExtensionState(extId).then(actualState => {
+      if (actualState !== undefined && actualState !== enabled) {
+        enabled = actualState;
+      }
+    });
   }
+
+  onMount(() => {
+    // Listen for extension state changes
+    browser.management.onEnabled.addListener((info) => {
+      if (info.id === extId) {
+        enabled = true;
+      }
+    });
+
+    browser.management.onDisabled.addListener((info) => {
+      if (info.id === extId) {
+        enabled = false;
+      }
+    });
+  });
+
+  onDestroy(() => {
+    // Clean up listeners
+    browser.management.onEnabled.removeListener((info) => {
+      if (info.id === extId) {
+        enabled = true;
+      }
+    });
+
+    browser.management.onDisabled.removeListener((info) => {
+      if (info.id === extId) {
+        enabled = false;
+      }
+    });
+  });
 </script>
 
 <div class="extension-item" class:selected>

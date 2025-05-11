@@ -225,7 +225,8 @@
       <div class="controls">
         <div class="main-controls">
           <button class="primary" on:click={toggleAllExtensions} disabled={isProcessing}>
-            {allPaused ? 'Resume All' : 'Pause All'}
+            <span class="button-icon">{allPaused ? '▶' : '⏸'}</span>
+            <span class="button-text">{allPaused ? 'Resume All' : 'Pause All'}</span>
           </button>
           <button class="icon-button" on:click={() => showSettings = true} disabled={isProcessing}>
             ⚙️
@@ -294,8 +295,17 @@
                       <path d="M8.5 5.5V4.5C8.5 3.94772 8.94772 3.5 9.5 3.5H10.5C11.0523 3.5 11.5 3.94772 11.5 4.5V5.5" stroke="currentColor" stroke-width="1.5"/>
                     </svg>
                   </button>
-                  <button on:click={() => toggleGroup(group)} disabled={isProcessing}>
-                    {group.paused ? 'Resume' : 'Pause'}
+                  <button 
+                    class="group-toggle-button" 
+                    class:paused={group.paused}
+                    on:click={() => toggleGroup(group)} 
+                    disabled={isProcessing}
+                    data-tooltip={group.paused 
+                      ? `Resume` 
+                      : `Pause`
+                    }
+                  >
+                    <span class="button-icon">{group.paused ? '▶' : '⏸'}</span>
                   </button>
                 </div>
               </div>
@@ -711,5 +721,67 @@
     width: 18px;
     height: 18px;
     pointer-events: none;
+  }
+
+  .button-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .button-text {
+    margin-left: 6px;
+  }
+
+  .group-toggle-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #333;
+    font-size: 14px;
+    transition: all 0.2s;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+  }
+
+  .group-toggle-button[data-tooltip]:hover::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+  }
+
+  .group-toggle-button[data-tooltip]:hover::after {
+    content: '';
+    position: absolute;
+    bottom: calc(100% - 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+  }
+
+  button.primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 </style> 
